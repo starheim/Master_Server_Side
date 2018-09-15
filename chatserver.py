@@ -28,7 +28,7 @@ def VEThread():
                 VEForwardSocketReturned = VEForwardSocket.recv()
 
                 VEReceiveSocket.send(b"")
-
+                
 def SThread():
         context2 = zmq.Context()
 
@@ -47,8 +47,18 @@ def SThread():
         #Sending socket back to retrieve message
         SubjectReceiveSocket.send(b"Chat established.")
 
+
         while True:
                 message = SubjectReceiveSocket.recv()
 
                 SubjectForwardSocket.send(b"Subject: %s" %message)
 
+                SubjectForwardSocketReturned = SubjectForwardSocket.recv()
+
+                SubjectReceiveSocket.send(b"")
+
+
+thread1 = threading.Thread(target=VEThread)
+thread2 = threading.Thread(target=SThread)
+thread1.start()
+thread2.start()
